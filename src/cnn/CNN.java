@@ -137,13 +137,13 @@ public class CNN  implements Serializable {
                 //Log.i(t+"th repeat,"+i+"th batch done.");
                 //output for what?
             }
-            double precision=(1.0*Positive)/count;
-            Log.i(t+"th repeat, precision:"+precision);
-            //when it's the first several round running, and precision is very high
+            double accuracy=(1.0*Positive)/count;
+            Log.i(t+"th repeat, accuracy:"+accuracy);
+            //when it's the first several round running, and accuracy is very high
             //need to adjust the ALPHA
-            if(t%10==1 && precision>0.96){
+            if(t%10==1 && accuracy>0.96){
                 ALPHA=0.001+0.9*ALPHA;
-                Log.i("Adjust ALPHA = "+ALPHA+" at round runing: "+t+",since precision is "+precision+" which is more than 0.96.");
+                Log.i("Adjust ALPHA = "+ALPHA+" at round runing: "+t+",since accuracy is "+accuracy+" which is more than 0.96.");
             }
         }
         //Log.i("all done.");
@@ -674,7 +674,7 @@ public class CNN  implements Serializable {
             }
         }
         double p=(1.0*Positive)/testset.size();
-        Log.i("test precision",p+"");
+        Log.i("test accuracy",p+"");
         return p;
     }
 
@@ -705,7 +705,7 @@ public class CNN  implements Serializable {
                 pw.write(label+"\n");
             }
             double p=(1.0*Positive)/testset.size();
-            Log.i("predict precision",p+"");
+            Log.i("predict accuracy",p+"");
             pw.flush();
             pw.close();
         } catch (FileNotFoundException e) {

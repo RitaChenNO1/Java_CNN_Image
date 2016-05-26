@@ -1,11 +1,15 @@
 package image;
+
+import util.Log;
+
 /**
  * Created by chzhenzh on 4/27/2016.
  */
 
 public class ImagePreprocess {
 
-    public static void main(String args[]) {
+    public static void resizeBinImageFile(int max_class,int rows_train,int targetWidth,int targetHeight,String trainPath,String valPath) {
+
 
         ImageDAO i=new ImageDAO();
         //for local test
@@ -16,16 +20,16 @@ public class ImagePreprocess {
         String imagePath="/home/grid/RIM2/Datasets/ILSVRC2015_CLS/Data/CLS-LOC/train/";
         String file="/home/grid/RIM2/Datasets/ILSVRC2015_CLS/ImageSets/CLS-LOC/train_cls.txt";
         String save2File="/home/grid/Rita/java/Data/all.format";
-        int max_class=10;
-        int rows_train=1000;
-        String save2TrainFile="/home/grid/Rita/java/Data/train_imagenet.format";
-        String save2ValFile="/home/grid/Rita/java/Data/val_imagenet.format";
+       // int max_class=10;
+       // int rows_train=1000;
+        String save2TrainFile=trainPath;
+        String save2ValFile=valPath;
 
         String delimiter1=" ";
         //the / need to be encoded
         String delimiter2="\\/";
-        int targetWidth=28;
-        int targetHeight=28;
+       // int targetWidth=28;
+       // int targetHeight=28;
         //save all image as 0/1 binary format
         //i.imageClass(file,delimiter1, delimiter2, imagePath, targetWidth, targetHeight, save2File,-1,rows_train,,save2TrainFile,save2ValFile);
 

@@ -63,7 +63,7 @@ public class ImageDAO {
                     imageClassID++;
                     innerClassID=0;
                 }
-                System.out.println("the class:"+imageClassID);
+                //System.out.println("the class:"+imageClassID);
                 //we don't need more than 10 classed, so go out
                 if(imageClassID>=max_class && max_class!=-1)
                 {
