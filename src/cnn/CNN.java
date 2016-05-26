@@ -6,8 +6,8 @@ import util.Log;
 import util.TaskManager;
 import util.Util;
 
-import java.io.IOException;
-import java.util.Arrays;
+import java.io.*;
+import java.util.Iterator;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 import util.Util.Operator;
@@ -22,8 +22,11 @@ import util.Util.Operator;
  * forward to compute value of node,
  * backward to compute error of node, and update the weight of the previous layer to the layer
  */
-public class CNN {
+public class CNN  implements Serializable {
 
+    //should serialize the class, otherwise, the model could not be saved.
+    //error message: java.io.NotSerializableException: cnn.CNN
+    private static final long serialVersionUID = 337920299147929932L;
     //learning factor
     private double LAMBDA=0;
     //the step size, alpha for bias and weight/kernel
@@ -131,9 +134,11 @@ public class CNN {
                 }
                 //1.4 finish a batch, need to update the weights/kernel
                 updateParas();
+                //Log.i(t+"th repeat,"+i+"th batch done.");
                 //output for what?
             }
             double precision=(1.0*Positive)/count;
+            Log.i(t+"th repeat, precision:"+precision);
             //when it's the first several round running, and precision is very high
             //need to adjust the ALPHA
             if(t%10==1 && precision>0.96){
@@ -141,6 +146,8 @@ public class CNN {
                 Log.i("Adjust ALPHA = "+ALPHA+" at round runing: "+t+",since precision is "+precision+" which is more than 0.96.");
             }
         }
+        //Log.i("all done.");
+
     }
 
     /**
@@ -610,9 +617,102 @@ public class CNN {
                     e.printStackTrace();
                 }
             }
+            Log.i("Listener stopped automatically..");
         }
     }
 
+
+    /**
+     * save the model to a file
+     * @param fileName
+     */
+    public void saveModel(String fileName)
+    {
+        try {
+            ObjectOutputStream oos=new ObjectOutputStream(new FileOutputStream(fileName));
+            oos.writeObject(this);
+            oos.flush();
+            oos.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static CNN loadModel(String fileName){
+            try {
+                ObjectInputStream in=new ObjectInputStream(new FileInputStream(fileName));
+                CNN cnn=(CNN)in.readObject();
+                in.close();
+                return cnn;
+            } catch (IOException|ClassNotFoundException e) {
+                e.printStackTrace();
+            }
+        return null;
+    }
+
+    public double test(Dataset testset){
+        Layer.prepareForNewBatch();
+        Iterator<Record> iter=testset.iter();
+        int Positive=0;
+        while(iter.hasNext())
+        {
+            Record record= iter.next();
+            forward(record);
+            //get the predict probability of class
+            Layer outputLayer=layers.get(layerNum-1);
+            int mapNum=outputLayer.getOutMapNum();
+            double[] out=new double[mapNum];
+            for(int m=0;m<mapNum;m++){
+                double[][] outmap=outputLayer.getMap(m);
+                //the 1st batch, the m map, matrix
+                out[m]=outmap[0][0];
+            }
+            int label=Util.getMaxIndex(out);
+            if((int)record.getLabel()==label)
+            {
+                Positive++;
+            }
+        }
+        double p=(1.0*Positive)/testset.size();
+        Log.i("test precision",p+"");
+        return p;
+    }
+
+    public void predict(Dataset testset,String fileName){
+        try {
+            PrintWriter pw=new PrintWriter(new File(fileName));
+            Layer.prepareForNewBatch();
+            Iterator<Record> iter=testset.iter();
+            int Positive=0;
+            while(iter.hasNext())
+            {
+                Record record= iter.next();
+                forward(record);
+                //get the predict probability of class
+                Layer outputLayer=layers.get(layerNum-1);
+                int mapNum=outputLayer.getOutMapNum();
+                double[] out=new double[mapNum];
+                for(int m=0;m<mapNum;m++){
+                    double[][] outmap=outputLayer.getMap(m);
+                    //the 1st batch, the m map, matrix
+                    out[m]=outmap[0][0];
+                }
+                int label=Util.getMaxIndex(out);
+                if((int)record.getLabel()==label)
+                {
+                    Positive++;
+                }
+                pw.write(label+"\n");
+            }
+            double p=(1.0*Positive)/testset.size();
+            Log.i("predict precision",p+"");
+            pw.flush();
+            pw.close();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        Log.i("Predict is done.");
+    }
 
 }
 

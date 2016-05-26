@@ -4,6 +4,7 @@ import util.Log;
 
 import java.io.*;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -55,6 +56,20 @@ public class Dataset {
         return dataset;
     }
 
+    /**
+     * clear the data  from memory
+     */
+    public void clear(){
+        records.clear();
+    }
+
+    /**
+     * get the Record 1 by 1
+     * @return
+     */
+    public Iterator<Record> iter() {
+        return records.iterator();
+    }
     /**
      * get the size of dataset
      * @return

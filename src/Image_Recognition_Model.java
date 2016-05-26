@@ -3,6 +3,7 @@ import cnn.Layer;
 import cnn.LayerBuilder;
 import cnn.Size;
 import dataset.Dataset;
+import util.Log;
 
 /**
  * Created by chzhenzh on 5/19/2016.
@@ -53,7 +54,8 @@ public class Image_Recognition_Model {
 
         //**********************************************************
         //1.load the data from Data/train.format
-        String filePath="Data/train.format";
+        //String filePath="Data/train.format";
+        String filePath="Data/train_imagenet.format";
         Dataset dataset=Dataset.load(filePath,",",748);
         //2. build all layers of CNN
         LayerBuilder builder=new LayerBuilder();
@@ -75,6 +77,20 @@ public class Image_Recognition_Model {
         CNN cnn=new CNN(builder,batchSize);
 
         //train the image dataset, and repeat 3 iterations
-        cnn.train(dataset,3);
+        cnn.train(dataset, 3);
+        String modelName = "model/model.cnn";
+        cnn.saveModel(modelName);
+        Log.i("Train is Done.");
+        cnn.test(dataset);
+        Log.i("Test is Done.");
+        dataset.clear();
+        dataset=null;
+
+
+       // CNN cnn1=CNN.loadModel(modelName);
+       // Log.i(cnn1+"");
+
+        Dataset testset = Dataset.load("Data/val_imagenet.format", ",", -1);
+        //cnn.predict(testset, "Data/test.predict");
     }
 }

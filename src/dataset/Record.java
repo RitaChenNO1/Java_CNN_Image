@@ -15,6 +15,7 @@ public class Record {
     //get the every row from data, and set it to the Record
     public Record(double[]data,int labelIndex){
         int data_len=data.length;
+        //since the predict data, don't have label
         if(labelIndex==-1){
             this.attr=data;
         }else{

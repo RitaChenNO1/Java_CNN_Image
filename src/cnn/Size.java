@@ -2,11 +2,17 @@ package cnn;
 
 import util.Log;
 
+import java.io.Serializable;
+
 /**
  * Created by chzhenzh on 5/24/2016.
  * set the size (matrix, has x, y) of Layer
  */
-public  class Size {
+public  class Size implements Serializable {
+
+    //should serialize the class, otherwise, the model could not be saved.
+    //error message: java.io.NotSerializableException: cnn.CNN
+    private static final long serialVersionUID = -209157832162004118L;
     public int x;
     public int y;
 

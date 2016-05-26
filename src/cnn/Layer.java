@@ -3,6 +3,8 @@ package cnn;
 import util.Log;
 import util.Util;
 
+import java.io.Serializable;
+
 /**
  * Created by chzhenzh on 5/24/2016.
  *
@@ -15,8 +17,11 @@ import util.Util;
  * batch-->record
  * Layer-->Map-->Kernel
  */
-public class Layer {
+public class Layer implements Serializable {
 
+    //should serialize the class, otherwise, the model could not be saved.
+    //error message: java.io.NotSerializableException: cnn.CNN
+    private static final long serialVersionUID = -5747622503947497069L;
     private  LayerType type;
     private int outMapNum;//every layer have
     private Size mapSize;
