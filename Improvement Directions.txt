@@ -1,0 +1,4 @@
+1. Current input Map Size is 28*28, could make it larger(32*32, 64*64 etc...), then the quality maybe higher, or even don't zoom in the image, use the original size of image.
+2. Use RGB value instead of binarized value as input of CNN
+3. Set min-batch larger, it depends on the CPU/memory of server
+4. load more training image

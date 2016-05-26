@@ -1,0 +1,14 @@
+## manually to compile java file in unix, and then run it;
+1. copy the java files to ~/Rita/java
+2. cd /home/grid/Rita/java/src/image
+//since the java file has package
+3. javac -d . *.java
+ cd src/image
+4. java image.ImagePreprocess
+
+
+## as jar file, then run jar file in unix;
+File -> Project Structure -> Artifacts
+
+
+C:\WORK\AA\Image_processing_CUP\face_recognition_CNN\out\artifacts\Image_Classification_CNN
