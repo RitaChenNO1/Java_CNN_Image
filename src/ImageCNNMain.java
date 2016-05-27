@@ -45,25 +45,34 @@ public class ImageCNNMain {
         int targetHeight=28;*/
         //args 0 is the main class name
         //[ImageCNNMain, 10, 1000, 28, 28, /home/grid/Rita/Data/train_imagenet.format, /home/grid/Rita/Data/val_imagenet.format]
-
         Log.i(Arrays.toString(args));
-        int i=1;
+        int i=0;
+        //for unix, the 1st argument is the class name, so need to +1
+        //but for win7, the 1st argument is the 10(max_class)
+        String os = System.getProperty("os.name");
+        if(!os.toLowerCase().startsWith("win")){
+            i++;
+        }
         int max_class=Integer.parseInt(args[i++]);
         int rows_train=Integer.parseInt(args[i++]);
         int targetWidth=Integer.parseInt(args[i++]);
         int targetHeight=Integer.parseInt(args[i++]);
         String trainValPath=args[i++];
-        String modelPath=args[i++];
+        String isDataExist=args[i++];
         String trainPath=trainValPath+"train_imagenet.format";
         String valPath=trainValPath+"val_imagenet.format";
-        String modelFile=modelPath+"cnn.model";
-        Log.i("1.Start to resize and binarized the source images...");
-        ImagePreprocess.resizeBinImageFile(max_class, rows_train, targetWidth, targetHeight, trainPath, valPath);
-        Log.i("End to resize and binarized the source images");
+        String modelFile=trainValPath+"cnn.model";
+        if(!isDataExist.equals("1")) {
+            Log.i("----> 1.Start to resize and binarized the source images...");
+            ImagePreprocess.resizeBinImageFile(max_class, rows_train, targetWidth, targetHeight, trainPath, valPath);
+            Log.i("End to resize and binarized the source images");
+        }else{
+            Log.i("Training Dataset and Validation dataset are already there,we could start to train the model now.");
+        }
         //**********************************************************
         //2.load the data from Data/train.format
         //String filePath="Data/train.format";
-        Log.i("2.Start to train the CNN model...");
+        Log.i("----> 2.Start to train the CNN model...");
         String filePath=trainPath;
         Dataset dataset=Dataset.load(filePath,",",targetWidth*targetHeight);
         //3. build all layers of CNN
@@ -87,17 +96,17 @@ public class ImageCNNMain {
         //4. train the image dataset, and repeat 3 iterations
         cnn.train(dataset, 3);
         Log.i("End to train the CNN model...");
-        Log.i("3. Saving the trained the CNN model...");
+        Log.i("----> 3. Saving the trained the CNN model...");
         String modelName = modelFile;
         cnn.saveModel(modelName);
         dataset.clear();
         dataset=null;
-        Log.i("4. Validate model with validataion dataset");
+        Log.i("----> 4. Validate model with validataion dataset");
         Dataset valSet=Dataset.load(valPath,",",targetWidth *targetHeight);
         cnn.test(valSet);
         valSet.clear();
         valSet=null;
-        Log.i("5. All Done.");
+        Log.i("----> 5. All Done.");
 
        // CNN cnn1=CNN.loadModel(modelName);
        // Log.i(cnn1+"");

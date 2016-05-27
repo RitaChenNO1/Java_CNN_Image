@@ -1,0 +1,4 @@
+Run-->Application,
+set as bellow:
+Main class: ImageCNNMain
+Program arguments: 10 1000 28 28 C:\WORK\AA\Image_processing_CUP\Image_Classification_CNN\Data\ 1

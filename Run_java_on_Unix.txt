@@ -1,14 +1,40 @@
-## manually to compile java file in unix, and then run it;
+Java IDE: Intelj
+Tool(MobaXterm) to connect to server:15.107.21.26 with account:grid
+
+##way1: copy jar file from window 7 to server, then run jar file on unix;
+1. build jar file
+File -> Project Structure -> Artifacts
+
+Build-->Build Artifacts-->Build
+get jar file
+C:\WORK\AA\Image_processing_CUP\Image_Classification_CNN\out\artifacts\Image_Classification_CNN_jar
+
+2. copy to unix
+access local(windows) path:
+cd /drives/c/work/AA/Image_processing_CUP/Image_Classification_CNN/out/artifacts/Image_Classification_CNN_jar
+scp * grid@15.107.21.26:/home/grid/Rita
+
+3. clean the image binarized files and old jar file
+rm /home/grid/Rita/Data/*
+rm /home/grid/Rita/*.jar
+rm /home/grid/Rita/model/*
+
+4. 
+cd /home/grid/Rita/
+java -jar Image_Classification_CNN.jar ImageCNNMain 10 1000 28 28 /home/grid/Rita/Data/ 1
+mkdir Data1
+java -jar Image_Classification_CNN.jar ImageCNNMain 10 1000 32 32 /home/grid/Rita/Data1/ 0
+mkdir Data2
+java -jar Image_Classification_CNN.jar ImageCNNMain 10 1000 56 56 /home/grid/Rita/Data2/ 0
+##comments for args of main
+##10 1000 28 28  
+##int max_class,int rows_train,int targetWidth,int targetHeight,String trainPath,String valPath
+
+
+##way2: get the image with java code,manually to compile java file in unix, and then run it;
 1. copy the java files to ~/Rita/java
 2. cd /home/grid/Rita/java/src/image
 //since the java file has package
 3. javac -d . *.java
  cd src/image
 4. java image.ImagePreprocess
-
-
-## as jar file, then run jar file in unix;
-File -> Project Structure -> Artifacts
-
-
-C:\WORK\AA\Image_processing_CUP\face_recognition_CNN\out\artifacts\Image_Classification_CNN

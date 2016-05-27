@@ -141,7 +141,7 @@ public class CNN  implements Serializable {
             Log.i(t+"th repeat, accuracy:"+accuracy);
             //when it's the first several round running, and accuracy is very high
             //need to adjust the ALPHA
-            if(t%10==1 && accuracy>0.96){
+            if(t%10<3 && accuracy>0.96){
                 ALPHA=0.001+0.9*ALPHA;
                 Log.i("Adjust ALPHA = "+ALPHA+" at round runing: "+t+",since accuracy is "+accuracy+" which is more than 0.96.");
             }
@@ -674,7 +674,7 @@ public class CNN  implements Serializable {
             }
         }
         double p=(1.0*Positive)/testset.size();
-        Log.i("test accuracy",p+"");
+        Log.i("Validation accuracy",p+"");
         return p;
     }
 
